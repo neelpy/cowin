@@ -110,10 +110,13 @@ function check() {
         if (err) return alert(`Error: ${err}`)
         const date = getDate();
         const age = getAge();
+        let count = 0;
         const available = res.centers.filter(center => {
+            count += center.sessions[0].min_age_limit === age;
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
         console.log(available);
+        results.innerHTML = `<div>Found ${count} centers listed for ${age}+ age group in your district</div>`
         const template = center => `
             <div class="center" style="border: 1px solid black">
                 <b>${center.name}, Pincode: ${center.pincode}</b><br>
@@ -121,9 +124,9 @@ function check() {
             </div>
         `;
         if (available.length === 0)
-            results.innerHTML = `No ${age}+ centers available :(`
+            results.innerHTML += `No ${age}+ centers with vaccine availibility found :(`
         else
-            results.innerHTML = available.map(c => template(c)).join(' ')
+            results.innerHTML += available.map(c => template(c)).join(' ')
     })
 }
 

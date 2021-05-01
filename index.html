@@ -3,10 +3,17 @@
         <title>CoWIN Availibility</title>
     </head>
     <body>
+        <section>
+            <h1>CoWIN Vaccine Availibility</h1>
+            <p>
+                Features: Added age group filter (18+ / 45+) and removed unavailable slots from the <a href="https://selfregistration.cowin.gov.in/" target="_blank">original app</a><br>
+                Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>. Code available at <a href="https://github.com/neelpy/cowin" target="_blank">https://github.com/neelpy/cowin</a>
+            </p>
+        </section>
         <form onsubmit="check()">
-            State: Gujarat, District: Ahmedabad Corporation<br>
+            <p>State: Gujarat, District: Ahmedabad Corporation</p>
             <label>Date:</label>
-            <input type="number" id="date">
+            <input type="number" id="date" value="1">
             Age: <label for="18">18+</label>
             <input type="radio" id="18" name="age" value="18" checked>
             <label for="45">45+</label>

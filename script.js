@@ -30,14 +30,11 @@ function get(callback) {
 function check() {
     get((err, res) => {
         if (err) return alert(`Error: ${err}`)
-        console.log(res);
         const date = getDate();
         const age = getAge();
-        console.log(age);
         const available = res.centers.filter(center => {
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
-        console.log(available);
         const template = center => `
             <div class="center" style="border: 1px solid black">
                 <b>${center.name}, Pincode: ${center.pincode}</b><br>
@@ -45,7 +42,8 @@ function check() {
             </div>
         `;
         if (available.length === 0)
-            results.innerHTML = 'No 18+ centers available :('
-        results.innerHTML = available.map(c => template(c)).join(' ')
+            results.innerHTML = `No ${age}+ centers available :(`
+        else
+            results.innerHTML = available.map(c => template(c)).join(' ')
     })
 }

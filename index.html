@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>CoWIN Availibility</title>
+    </head>
+    <body>
+        <form onsubmit="check()">
+            State: Gujarat, District: Ahmedabad Corporation<br>
+            <label>Date:</label>
+            <input type="number" id="date">
+            Age: <label for="18">18+</label>
+            <input type="radio" id="18" name="age" value="18" checked>
+            <label for="45">45+</label>
+            <input type="radio" id="45" name="age" value="45">
+            <input type="button" value="Fetch Available Centers" onclick="check()">
+        </form>
+        <div id="results">
+            
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>

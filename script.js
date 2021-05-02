@@ -81,7 +81,7 @@ function setDistricts(d = null) {
             }
             if (d) district.value = d;
         }
-      };
+    };
     req.send();
 }
 function getDistrictId() {
@@ -98,10 +98,10 @@ function get(callback) {
     req.onload = function() {
         var status = req.status;
         if (status === 200)
-          callback(null, req.response);
+            callback(null, req.response);
         else
-          callback(status, req.response);
-      };
+            callback(status, req.response);
+    };
     req.send();
 }
 
@@ -116,23 +116,19 @@ function check() {
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
         console.log(available);
-        results.innerHTML = `<div>Found ${count} centers listed for ${age}+ age group in your district</div>`
         const template = center => `
-            <div class="center" style="border: 1px solid black">
+            <div class="p-1" style="border: 1px solid black">
                 <b>${center.name}, Pincode: ${center.pincode}</b><br>
                 ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity).join('<br>')}<br>
             </div>
         `;
-        if (available.length === 0)
-	    {
-		    results.innerHTML += `No ${age}+ centers with vaccine availibility found :(`
-		    results.className = "container alert alert-danger";
-	    }    
-        else
-	    {
-		    results.innerHTML += available.map(c => template(c)).join(' ')
-		    results.className = "container alert alert-success";
-	    }
+        if (available.length === 0) {
+            results.innerHTML = `<div class="alert alert-danger">Found ${count} centers listed for ${age}+ age group in your district</div>`
+            results.innerHTML += `<div>All ${age}+ vaccine centers are fully booked <b>:(</b><br>Please keep checking for updates</div>`
+        } else {
+            results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slot, head over to the <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">official CoWIN website</a></b> to book the slot</div>`
+            results.innerHTML += available.map(c => template(c)).join(' ')
+        }
     })
 }
 

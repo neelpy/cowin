@@ -1,5 +1,6 @@
 <html>
     <head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <title>CoWIN Availibility</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
         <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -13,33 +14,56 @@
         </script>
     </head>
     <body>
-        <section>
-            <h1>CoWIN Vaccine Availibility</h1>
-            <p>
-                Features: Added age group filter (18+ / 45+) and removed unavailable slots from the <a href="https://selfregistration.cowin.gov.in/" target="_blank">original app</a><br>
-                Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>. Code available at <a href="https://github.com/neelpy/cowin" target="_blank">https://github.com/neelpy/cowin</a>
-            </p>
+        <section class="container">
+            <h1 class="text-center">CoWIN Vaccine Availibility</h1>
+            <h3>
+		Features:
+	    </h3>
+	    <ul class="list-group list-group-flush">
+  		<li class="list-group-item">Added age group filter (18+ / 45+) and removed unavailable slots from the <a href="https://selfregistration.cowin.gov.in/" target="_blank">original app</a></li>
+  		<li class="list-group-item">Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>.</li>
+  		<li class="list-group-item">Code available at <a href="https://github.com/neelpy/cowin" target="_blank">https://github.com/neelpy/cowin</a></li>
+	    </ul>
         </section>
-        <form onsubmit="check()">
-            <label>State:</label>
-            <select id="state">
-                <option value="-" selected disabled hidden>Select State</option>
-            </select>
-            <label>District:</label>
-            <select id="district">
-                <option value="-" selected disabled hidden>Select District</option>
-            </select><br>
-            <label>Date:</label>
-            <input type="date" id="date">
-            Age: <label for="18+">18+</label>
-            <input type="radio" id="18+" name="age" value="18+" checked>
-            <label for="45+">45+</label>
-            <input type="radio" id="45+" name="age" value="45+">
-            <input type="button" value="Fetch Available Centers" onclick="check()">
+        <form class="container" onsubmit="check()">
+	<div class="row">
+		<div class="col-md-6">
+			<label class="form-label">State:</label>
+            		<select id="state" class="form-select">
+                		<option value="-" selected disabled hidden>Select State</option>
+            		</select>
+		</div>
+		<div class="col-md-6">
+			<label class="form-label">District:</label>
+            		<select id="district" class="form-select">
+                		<option value="-" selected disabled hidden>Select District</option>
+            		</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">	
+            		<label class="form-label">Date:</label>
+            		<input type="date" id="date" class="form-control">
+		</div>
+		<div class="col-md-6">
+			<label class="form-label">Age:</label><br>
+	    		<label class="form-check-label" for="18+"> 18+</label>
+            		<input type="radio" id="18+" name="age" value="18+" checked class="form-check-input">
+            		<label for="45+" class="form-check-label">45+</label>
+            		<input type="radio" id="45+" name="age" value="45+" class="form-check-input">
+		</div>
+	</div>         
+	<div class="row">
+		<div class="col-md">
+			<label class="form-label">&nbsp;</label><br>
+			<input type="button" class="btn btn-outline-dark" value="Fetch Available Centers" onclick="check()">
+		</div>
+	</div>
         </form>
-        <div id="results">
+        <div id="results" class="container">
             
         </div>
         <script src="script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     </body>
 </html>

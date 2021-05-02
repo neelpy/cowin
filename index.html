@@ -33,10 +33,10 @@
 	<div class="mt-5 py-4">
 		<ul class="list-group-item mb-0">Features: Added age group filter (18+ / 45+) and removed unavailable slots from the original <a href="https://selfregistration.cowin.gov.in/" target="_blank">Co-WIN App</a></ul>
 		<ul class="list-group-item mb-0">Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>. Code available at <a href="https://github.com/neelpy/cowin" target="_blank">GitHub Repository</a></ul>
-		<ul class="list-group-item mb-0">Once you find available slot, book the slots from the official portal for <a href="https://selfregistration.cowin.gov.in/" target="_blank">Co-WIN Registration</a></ul>
+		<ul class="list-group-item mb-0">Once you find an available slot, book the slots from the official portal for <a href="https://selfregistration.cowin.gov.in/" target="_blank">Co-WIN Registration</a></ul>
 	</div>
 	<form class="container mb-4" onsubmit="check()">
-		<div class="row">
+		<div class="row mb-2">
 			<div class="col-md-6">
 				<label for="state" class="form-label">State:</label>
 				<select id="state" class="form-select">
@@ -52,7 +52,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<label for="date" class="form-label">Date:</label>
+				<label for="date" class="form-label">Date (dd-mm-yyyy):</label>
 				<input type="date" id="date" class="form-control">
 			</div>
 			<div class="col-md-6">

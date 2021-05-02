@@ -1,45 +1,85 @@
-<html>
-    <head>
-        <title>CoWIN Availibility</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TD2EHC7LN"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+<!doctype html>
+<html lang="en">
 
-            gtag('config', 'G-2TD2EHC7LN');
-        </script>
-    </head>
-    <body>
-        <section>
-            <h1>CoWIN Vaccine Availibility</h1>
-            <p>
-                Features: Added age group filter (18+ / 45+) and removed unavailable slots from the <a href="https://selfregistration.cowin.gov.in/" target="_blank">original app</a><br>
-                Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>. Code available at <a href="https://github.com/neelpy/cowin" target="_blank">https://github.com/neelpy/cowin</a>
-            </p>
-        </section>
-        <form onsubmit="check()">
-            <label>State:</label>
-            <select id="state">
-                <option value="-" selected disabled hidden>Select State</option>
-            </select>
-            <label>District:</label>
-            <select id="district">
-                <option value="-" selected disabled hidden>Select District</option>
-            </select><br>
-            <label>Date:</label>
-            <input type="date" id="date">
-            Age: <label for="18+">18+</label>
-            <input type="radio" id="18+" name="age" value="18+" checked>
-            <label for="45+">45+</label>
-            <input type="radio" id="45+" name="age" value="45+">
-            <input type="button" value="Fetch Available Centers" onclick="check()">
-        </form>
-        <div id="results">
-            
-        </div>
-        <script src="script.js"></script>
-    </body>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<link href="styles.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+	<title >CoWIN Availability</title>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-2TD2EHC7LN"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-2TD2EHC7LN');
+	</script>
+</head>
+
+<body>
+
+<header>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<a class="navbar-brand mx-auto" href="/">CoWIN Vaccine Availability</a>
+	</nav>
+</header>
+
+<main role="main" class="container">
+	<div class="mt-5 py-4">
+		<ul class="list-group-item mb-0">Features: Added age group filter (18+ / 45+) and removed unavailable slots from the original <a href="https://selfregistration.cowin.gov.in/" target="_blank"><button type="button" class="btn btn-outline-primary">Co-WIN App</button></a></ul>
+		<ul class="list-group-item mb-0">Implemented using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank"><button type="button" class="btn btn-outline-primary">Co-WIN Public API</button></a> Code available at <a href="https://github.com/neelpy/cowin" target="_blank"><button type="button" class="btn btn-outline-primary">GitHub Repository</button></a></ul>
+		<ul class="list-group-item mb-0">Once you find available slot, book the slots from the official portal <a href="https://selfregistration.cowin.gov.in/" target="_blank"><button type="button" class="btn btn-outline-primary">Co-WIN Registration</button></a></ul>
+	</div>
+	<form class="container mb-4" onsubmit="check()">
+		<div class="row">
+			<div class="col-md-6">
+				<label for="state" class="form-label">State:</label>
+				<select id="state" class="form-select">
+					<option value="-" selected disabled hidden>Select State</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<label for="district" class="form-label">District:</label>
+				<select id="district" class="form-select">
+					<option value="-" selected disabled hidden>Select District</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="date" class="form-label">Date:</label>
+				<input type="date" id="date" class="form-control">
+			</div>
+			<div class="col-md-6">
+				<label class="form-label">Age:</label><br>
+				<div class="form-check form-check-inline">
+					<label for="18+" class="form-check-label">18+</label>
+					<input type="radio" id="18+" name="age" value="18+" checked class="form-check-input">
+				</div>
+				<div class="form-check form-check-inline">
+					<label for="45+" class="form-check-label">45+</label>
+					<input type="radio" id="45+" name="age" value="45+" class="form-check-input">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<label class="form-label">&nbsp;</label><br>
+				<input type="button" class="btn btn-outline-dark" value="Fetch Available Centers" onclick="check()">
+			</div>
+		</div>
+	</form>
+	<div id="results" class="container mb-5">
+
+	</div>
+</main>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
 </html>

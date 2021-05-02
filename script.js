@@ -124,9 +124,15 @@ function check() {
             </div>
         `;
         if (available.length === 0)
-            results.innerHTML += `No ${age}+ centers with vaccine availibility found :(`
+	    {
+		    results.innerHTML += `No ${age}+ centers with vaccine availibility found :(`
+		    results.className = "container alert alert-danger";
+	    }    
         else
-            results.innerHTML += available.map(c => template(c)).join(' ')
+	    {
+		    results.innerHTML += available.map(c => template(c)).join(' ')
+		    results.className = "container alert alert-success";
+	    }
     })
 }
 

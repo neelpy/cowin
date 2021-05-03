@@ -123,8 +123,12 @@ function check() {
             </div>
         `;
         if (available.length === 0) {
-            results.innerHTML = `<div class="alert alert-danger">Found ${count} centers listed for ${age}+ age group in your district</div>`
-            results.innerHTML += `<div>All ${age}+ vaccine centers are fully booked<br>Please keep checking for updates</div>`
+            results.innerHTML = `
+                <div class="alert alert-danger">
+                    Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now.<br>
+                    Please keep checking for updates.
+                </div>
+            `;
         } else {
             results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots, head over to the <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">official CoWIN website</a></b> to book the slot</div>`
             results.innerHTML += available.map(c => template(c)).join(' ')

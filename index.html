@@ -50,7 +50,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<label for="date" class="form-label">Date (dd-mm-yyyy):</label>
+				<label for="date" class="form-label">Date (fetching slots for 1 week from this):</label>
 				<input type="date" id="date" class="form-control">
 			</div>
 			<div class="col-md-6">
@@ -67,8 +67,8 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<label class="form-label">&nbsp;</label><br>
-				<input type="button" class="btn btn-outline-dark" value="Fetch Available Centers" onclick="check()">
+				<label class="form-label" id="fetch-status">Fetch the slots every 10 seconds</label><br>
+				<input type="button" class="btn btn-outline-dark" id="schedule" value="Run Slot Checker" onclick="check()">
 			</div>
 		</div>
 	</form>
@@ -76,15 +76,22 @@
 
 	</div>
 	<div class="">
-		<ul class="list-group-item mb-0"><i>Features:</i> Added age group filter (18+ / 45+) and removed unavailable slots from the original <a href="https://selfregistration.cowin.gov.in/" target="_blank">Co-WIN</a> app.</ul>
+		<ul class="list-group-item mb-0"><i>Features:</i> Saving your state and district, removing unavailable slots, alert on finding an available slot, the rest is same as the original <a href="https://selfregistration.cowin.gov.in/" target="_blank">Co-WIN</a> app.</ul>
 		<ul class="list-group-item mb-0"><i>Implementation:</i> Created using the <a href="https://apisetu.gov.in/public/marketplace/api/cowin" target="_blank">Co-WIN Public API</a>. This tool is open source, you can find the code here <i><a href="https://github.com/neelpy/cowin" target="_blank">[link]</a></i>.</ul>
+		<ul class="list-group-item mb-0"><i>Known bugs:</i> The data might be inconsistent with the actual website, because the public API gives slightly older cached data.</ul>
 		<ul class="list-group-item mb-5"><i>Feedback:</i> If you find any bugs or have any suggestions to improve the tool, you may report them here <i><a href="https://docs.google.com/forms/d/e/1FAIpQLScEH36ntcFE1cseCneS_zeauw_8nEZktwvVV6OEjLhH81pDUw/viewform?usp=sf_link" target="_blank">[link]</a></i></ul>
 	</div>
+
 </main>
 
 <!--<footer class="bg-dark">
 	<div class="">Developed by Neel Patel</div>
 </footer>-->
+
+
+</main>
+
+
 
 <script src="script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>

@@ -4,7 +4,15 @@ var date = document.getElementById('date');
 var results = document.getElementById('results');
 var state = document.getElementById('state');
 var district = document.getElementById('district');
-var checks = 1;
+var scheduleButton = document.getElementById('schedule');
+var fetchStatus = document.getElementById('fetch-status');
+var alerts = 0;
+
+var interval = 10; // seconds
+var intervalID;
+var remainingTime = 10;
+var fetchIntervalId;
+var running = false;
 
 const recheck = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
@@ -109,22 +117,33 @@ function get(callback) {
     req.send();
 }
 
-async function check() {
-    get((err, res) => {
+function check() {
+    if (running) { // Stop
+        clearInterval(intervalID)
+        clearInterval(fetchIntervalId)
+        scheduleButton.value = 'Run Slot Checker'
+        fetchStatus.innerText = 'Fetch the slots every 10 seconds'
+    } else { // Start
+        checker()
+        intervalID = setInterval(checker, interval * 1000)
+        fetchIntervalId = setInterval(() => {
+            fetchStatus.innerText = 'Fetching the slots in ' + remainingTime--;
+        }, 1000)
+        fetchStatus.innerText = 'Fetching!'
+        scheduleButton.value = 'Stop Fetching'
+    }
+    running = !running;
+}
+
+async function checker() {
+    results.innerHTML = '<div class="alert alert-warning">Fetching!</div>';
+    get(async (err, res) => {
         if (err) return alert(`Error: ${err}`)
         const age = getAge();
         let count = 0;
         console.log(res);
         const available = res.centers.filter(center => {
             count += center.sessions[0].min_age_limit === age;
-
-            center.sessions.some(b =>{
-                if(b.available_capacity >0 && b.min_age_limit === age){
-                    var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
-                    audio.play();
-                }
-            })
-
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
         console.log(available);
@@ -134,22 +153,34 @@ async function check() {
                 ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity).join('<br>')}<br>
             </div>
         `;
+        await recheck(500)
         if (available.length === 0) {
             results.innerHTML = `
                 <div class="alert alert-danger">
                     Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now.<br>
-                    This code changes after 10 seconds no need to refersh.
                 </div>
             `;
         } else {
+            sendAlert();
             results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots, head over to the <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">official CoWIN website</a></b> to book the slot</div>`
             results.innerHTML += available.map(c => template(c)).join(' ')
         }
+        fetchStatus.innerText = 'Fetched!';
+        remainingTime = interval - 1;
     })
-    await recheck(10000);
-    console.log("Slot Checks :" + checks++)
-    check();
+}
 
+function sendAlert() {
+    // Send only the first alert
+    if (alerts > 0) return;
+    
+    // Play alert sound
+    var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+    audio.play();
+    // TODO: Find a good way to notify the user
+    alert('Found available slots!')
+
+    alerts ++
 }
 
 state.onchange = () => {

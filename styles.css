@@ -20,3 +20,8 @@ footer {
     z-index: 10;
     padding: 0 10px;
 }
+
+.link {
+    color: lightblue;
+    font-weight: bold;
+}

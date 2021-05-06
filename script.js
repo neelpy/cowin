@@ -4,6 +4,10 @@ var date = document.getElementById('date');
 var results = document.getElementById('results');
 var state = document.getElementById('state');
 var district = document.getElementById('district');
+var checks = 1;
+
+const recheck = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
 
 var states = {
     "Andaman and Nicobar Islands": 1,
@@ -105,14 +109,22 @@ function get(callback) {
     req.send();
 }
 
-function check() {
+async function check() {
     get((err, res) => {
         if (err) return alert(`Error: ${err}`)
-        const date = getDate();
         const age = getAge();
         let count = 0;
+        console.log(res);
         const available = res.centers.filter(center => {
             count += center.sessions[0].min_age_limit === age;
+
+            center.sessions.some(b =>{
+                if(b.available_capacity >0 && b.min_age_limit === age){
+                    var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+                    audio.play();
+                }
+            })
+
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
         console.log(available);
@@ -126,7 +138,7 @@ function check() {
             results.innerHTML = `
                 <div class="alert alert-danger">
                     Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now.<br>
-                    Please keep checking for updates.
+                    This code changes after 10 seconds no need to refersh.
                 </div>
             `;
         } else {
@@ -134,6 +146,10 @@ function check() {
             results.innerHTML += available.map(c => template(c)).join(' ')
         }
     })
+    await recheck(10000);
+    console.log("Slot Checks :" + checks++)
+    check();
+
 }
 
 state.onchange = () => {

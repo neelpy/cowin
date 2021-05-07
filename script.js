@@ -14,8 +14,20 @@ var remainingTime = 10;
 var fetchIntervalId;
 var running = false;
 
-const recheck = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+const recheck = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
+const reverseDate = (date) => date.split("-").reverse().join("-");
+
+const template = center => `
+    <div class="p-1" style="border: 1px solid black">
+        <b>${center.name}, Pincode: ${center.pincode}</b><br>
+        ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity + ' doses of ' + s.vaccine + ' available').join('<br>')}<br>
+    </div>
+`;
+
+const dateTemplate = (sessions) => `
+    ${sessions.filter(s => s.available_capacity > 0).map(s => "<div class=\"p-1\">" + s.center + '(' + s.pincode + ') : ' + s.available_capacity + ' doses of ' + s.vaccine + ' available').join("</div>")}
+`;
 
 var states = {
     "Andaman and Nicobar Islands": 1,
@@ -60,7 +72,7 @@ var districts = {};
 
 function getDate() {
     const d = dateField.value;
-    return d.split('-').reverse().join('-')
+    return reverseDate(d)
 }
 function getAge() {
     return age18.checked ? 18 : 45;
@@ -135,25 +147,40 @@ function check() {
     running = !running;
 }
 
+function arrangeByDate(availableCenters){
+    // Split the sessions by date
+    mapByDate = new Object();
+
+    availableCenters.forEach(center => {
+        center.sessions.forEach((session) => {
+            // Add center name and pincode to session
+            session.center = center.name;
+            session.pincode = center.pincode;
+            
+            if(mapByDate.hasOwnProperty(session.date))
+                mapByDate[session.date].push(session);
+            else
+                mapByDate[session.date] = [session];
+        });
+    });
+
+    return mapByDate;
+}
+
 async function checker() {
     results.innerHTML = '<div class="alert alert-warning">Fetching!</div>';
     get(async (err, res) => {
         if (err) return alert(`Error: ${err}`)
         const age = getAge();
         let count = 0;
-        console.log(res);
         const available = res.centers.filter(center => {
             count += center.sessions[0].min_age_limit === age;
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
-        console.log(available);
-        const template = center => `
-            <div class="p-1" style="border: 1px solid black">
-                <b>${center.name}, Pincode: ${center.pincode}</b><br>
-                ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity).join('<br>')}<br>
-            </div>
-        `;
-        await recheck(500)
+
+        let dateArranged = arrangeByDate(available);
+        await recheck(500);
+        
         if (available.length === 0) {
             results.innerHTML = `
                 <div class="alert alert-danger">
@@ -163,12 +190,31 @@ async function checker() {
         } else {
             sendAlert();
             results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots, head over to the <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">official CoWIN website</a></b> to book the slot</div>`
-            results.innerHTML += available.map(c => template(c)).join(' ')
+            printByDate(dateArranged);
         }
         fetchStatus.innerText = 'Fetched!';
         remainingTime = interval - 1;
     })
 }
+
+function printByDate(dateArrangedSessions){
+    sortedDates = Object.keys(dateArrangedSessions).sort((date1, date2) => {
+        let isoDate1 = reverseDate(date1);
+        let isoDate2 = reverseDate(date2);
+        if(isoDate1 < isoDate2)
+            return -1
+        if(isoDate2 == isoDate1)
+            return 0
+        return 1
+    });
+    sortedDates.forEach((date) => {
+        results.innerHTML += `<div class="p-1" style="border: 1px solid black"><b>${date}</b><br>`    
+        results.innerHTML += dateTemplate(dateArrangedSessions[date]);
+    });
+}
+
+const printByCenter = (available) => results += available.map(c => template(c)).join(' ');
+
 
 function sendAlert() {
     // Send only the first alert

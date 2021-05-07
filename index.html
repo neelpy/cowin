@@ -70,6 +70,17 @@
 				<label class="form-label" id="fetch-status">Fetch the slots every 10 seconds</label><br>
 				<input type="button" class="btn btn-outline-dark" id="schedule" value="Run Slot Checker" onclick="check()">
 			</div>
+			<div class="col-md-6">
+				<label class="form-label">Sort by:</label><br>
+				<div class="form-check form-check-inline">
+					<label for="center" class="form-check-label">Center</label>
+					<input type="radio" id="sort-center" name="sort-by" value="center" checked class="form-check-input" checked>
+				</div>
+				<div class="form-check form-check-inline">
+					<label for="date" class="form-check-label">Date</label>
+					<input type="radio" id="sort-date" name="sort-by" value="date" class="form-check-input">
+				</div>
+			</div>
 		</div>
 	</form>
 	<div id="results" class="container pb-4">

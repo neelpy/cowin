@@ -6,6 +6,7 @@ var state = document.getElementById('state');
 var district = document.getElementById('district');
 var scheduleButton = document.getElementById('schedule');
 var fetchStatus = document.getElementById('fetch-status');
+var sortByDate = document.getElementById("sort-date");
 var alerts = 0;
 
 var interval = 10; // seconds
@@ -21,12 +22,12 @@ const reverseDate = (date) => date.split("-").reverse().join("-");
 const template = center => `
     <div class="p-1" style="border: 1px solid black">
         <b>${center.name}, Pincode: ${center.pincode}</b><br>
-        ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity + ' doses of ' + s.vaccine + ' available').join('<br>')}<br>
+        ${center.sessions.filter(s => s.available_capacity > 0).map(s => s.date + ': ' + s.available_capacity + ' dose(s) of ' + s.vaccine + ' available').join('<br>')}<br>
     </div>
 `;
 
 const dateTemplate = (sessions) => `
-    ${sessions.filter(s => s.available_capacity > 0).map(s => "<div class=\"p-1\">" + s.center + '(' + s.pincode + ') : ' + s.available_capacity + ' doses of ' + s.vaccine + ' available').join("</div>")}
+    ${sessions.filter(s => s.available_capacity > 0).map(s => "<div class=\"p-1\">" + s.center + '(' + s.pincode + ') : ' + s.available_capacity + ' dose(s) of ' + s.vaccine + ' available').join("</div>")}
 `;
 
 var states = {
@@ -76,6 +77,9 @@ function getDate() {
 }
 function getAge() {
     return age18.checked ? 18 : 45;
+}
+function getSortBy(){
+    return sortByDate.checked ? "date" : "center";
 }
 function setStates() {
     for (const s in states) {
@@ -177,8 +181,6 @@ async function checker() {
             count += center.sessions[0].min_age_limit === age;
             return center.sessions.some(s => (s.available_capacity > 0 && s.min_age_limit === age))
         })
-
-        let dateArranged = arrangeByDate(available);
         await recheck(500);
         
         if (available.length === 0) {
@@ -190,7 +192,10 @@ async function checker() {
         } else {
             sendAlert();
             results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots, head over to the <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">official CoWIN website</a></b> to book the slot</div>`
-            printByDate(dateArranged);
+            if(getSortBy() == "date")
+                printByDate(arrangeByDate(available));
+            else
+                printByCenter(available);
         }
         fetchStatus.innerText = 'Fetched!';
         remainingTime = interval - 1;
@@ -213,7 +218,7 @@ function printByDate(dateArrangedSessions){
     });
 }
 
-const printByCenter = (available) => results += available.map(c => template(c)).join(' ');
+const printByCenter = (available) => {results.innerHTML += available.map(c => template(c)).join(' ')};
 
 
 function sendAlert() {

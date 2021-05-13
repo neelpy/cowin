@@ -221,7 +221,7 @@ async function setPreferences() {
 async function getCaptcha() {
   if (!token || !session) return
 
-  console.log('Found a slot!')
+  play('Found a slot!')
 
   const res = await axios({
     method: 'post',

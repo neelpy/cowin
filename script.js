@@ -177,10 +177,18 @@ async function fetchSlots() {
 
 async function check(centers) {
   const age = getAge();
+  const fees = getFees();
+  const vaccine = getVaccine();
   let count = 0;
   available = centers.filter(center => {
     count += center['sessions'][0]['min_age_limit'] === age;
-    return center['sessions'].some(s => (s['available_capacity'] > 0 && s['min_age_limit'] === age))
+    if (fees && fees !== center['fee_type'].toLowerCase())
+      return false
+    return center['sessions'].some(s => {
+      if (vaccine && vaccine !== s['vaccine'])
+        return false
+      return (s['available_capacity'] > 10 && s['min_age_limit'] === age)
+    })
   })
   console.log({available, centers});
   const template = center => `
@@ -190,7 +198,9 @@ async function check(centers) {
           </div>
       `;
   await delay(1)
-  if (available.length === 0) {
+  if (count === 0) {
+    results.innerHTML = `<div class="alert alert-danger">No centers listed for ${age}+ age group found in your district.</div>`
+  } else if (available.length === 0) {
     results.innerHTML = `<div class="alert alert-danger">Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now.</div>`;
   } else {
     results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots.</div>`
@@ -266,17 +276,26 @@ async function book() {
   } catch(e) {
     const error = e.response.data.error
     console.log({error})
-    $bookingDiv.html(`<div class="alert alert-danger">${error}</div>`)
-    setTimeout(() => $bookingDiv.empty(), 30 * 1000)
+    $bookingDiv.html(`<div id="booking-error" class="alert alert-danger">${error}</div>`)
+    setTimeout(() => $('#booking-error').remove(), 30 * 1000)
     await startFetchSlots()
   }
 }
 
 async function download(appointment_id) {
+  const headers = headers()
+  headers['Accept'] = 'application/pdf'
   const res = await axios({
     method: 'get',
     url: 'appointment/appointmentslip/download',
     params: { appointment_id },
-    headers: headers()
+    headers,
+    responseType: 'arraybuffer'
   })
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'Appointment_slip.pdf');
+  document.body.appendChild(link);
+  link.click();
 }

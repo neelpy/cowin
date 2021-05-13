@@ -4638,7 +4638,8 @@ function getVaccine() {
   return v === 'any' ? null : v
 }
 function getFees() {
-  return
+  const f = $fees.filter(':checked').val().slice(2)
+  return f === 'any' ? null : f
 }
 
 

@@ -199,9 +199,9 @@ async function check(centers) {
       `;
   await delay(1)
   if (count === 0) {
-    results.innerHTML = `<div class="alert alert-danger">No centers listed for ${age}+ age group found in your district.</div>`
+    results.innerHTML = `<div class="alert alert-danger">No centers listed for ${age}+ age group found in your district 😔</div>`
   } else if (available.length === 0) {
-    results.innerHTML = `<div class="alert alert-danger">Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now.</div>`;
+    results.innerHTML = `<div class="alert alert-danger">Found ${count} centers listed for ${age}+ age group in your district, and all of them are fully booked right now 😕</div>`;
   } else {
     results.innerHTML = `<div class="alert alert-success">Found <b>${count} centers</b> listed for ${age}+ age group in your district, out of which <b>${available.length} centers</b> have available slots.</div>`
     results.innerHTML += available.map(c => template(c)).join(' ')
@@ -216,7 +216,7 @@ async function setPreferences() {
   for (let i=0; i<ben.length; i++) {
     const b = ben[i]
     const ageB = 2021 - parseInt(b['birth_year'])
-    const doseC = (dose === 1 && b['vaccine'] === '') || (dose === 2 && b['vaccine'] !== '')
+    const doseC = (dose === 1 && b['dose1_date'] === '') || (dose === 2 && b['dose1_date'] !== '')
     const ageC =  ageB >= age // TODO confirm this
     const vaccineC = dose === 1 || (dose === 2 && (!vaccine || vaccine === b['vaccine'].toLowerCase()))
     ben[i].allow = doseC && ageC && vaccineC
@@ -271,8 +271,9 @@ async function book() {
     let msg = `Successfully booked! 🎉<br>`
     msg += `Center: <b>${c['name']}, ${c['address']}, <a href="https://www.google.com/maps/place/${c['pincode']}" target="_blank">${c['pincode']}</a></b><br>`
     msg += `Beneficiaries: ${ben.filter(b => b.allow).map(b => b.name).join(', ')}<br>`
-    msg += `Appointment slip: <button class="btn btn-success" onclick="download(appointment_id)">Download</button>`
+    msg += `Appointment slip: <button class="btn btn-success" id="download">Download</button>`
     $bookingDiv.html(`<div class="alert alert-success">${msg}</div>`)
+    $('#download').click(() => download(appointment_id))
   } catch(e) {
     const error = e.response.data.error
     console.log({error})
@@ -283,16 +284,18 @@ async function book() {
 }
 
 async function download(appointment_id) {
-  const headers = headers()
-  headers['Accept'] = 'application/pdf'
   const res = await axios({
     method: 'get',
     url: 'appointment/appointmentslip/download',
     params: { appointment_id },
-    headers,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/pdf',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
     responseType: 'arraybuffer'
   })
-  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const url = window.URL.createObjectURL(new Blob([res.data]));
   const link = document.createElement('a');
   link.href = url;
   link.setAttribute('download', 'Appointment_slip.pdf');

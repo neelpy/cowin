@@ -161,15 +161,29 @@ function markAsFetching() {
 async function fetchSlots() {
   console.log('fetching')
   results.innerHTML = '<div class="alert alert-warning">Fetching!</div>';
-  const res = await axios({
-    method: 'get',
-    url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByDistrict',
-    params: {
-      district_id: localStorage.getItem('district_id'),
-      date: getDate()
-    },
-    headers: headers()
-  })
+  let res;
+  if(localStorage.getItem('pincode')!= "null" && localStorage.getItem('pincode')!= '')
+   {
+      res = await axios({
+      method: 'get',
+      url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByPin',
+      params: {
+        pincode: localStorage.getItem('pincode'),
+        date: getDate()
+      },
+      headers: headers()
+    })
+  } else {
+    res = await axios({
+      method: 'get',
+      url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByDistrict',
+      params: {
+        district_id: localStorage.getItem('district_id'),
+        date: getDate()
+      },
+      headers: headers()
+    })
+  }
   const centers = res.data['centers']
   await check(centers)
   await getCaptcha()

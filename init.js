@@ -4539,6 +4539,7 @@ const districts = [
 
 // Elements
 const $districtInput = $('input#district-input')
+const $pincodeInput = $('input#pincode-input')
 const $district = $('#district')
 const $age = $('input[type=radio][name=age]')
 const $dose = $('input[type=radio][name=dose]')
@@ -4646,6 +4647,8 @@ function getFees() {
 // Load
 if (localStorage.getItem('district_name'))
   $districtInput.attr('value', localStorage.getItem('district_name'))
+if (localStorage.getItem('pincode'))
+  $districtInput.attr('value', localStorage.getItem('pincode'))  
 if (localStorage.getItem('age'))
   $(`input#${localStorage.getItem('age')}`).prop('checked', true)
 if (localStorage.getItem('dose'))
@@ -4681,6 +4684,9 @@ $districtInput.change(function() {
       break;
     }
   }
+});
+$pincodeInput.change(function() {
+  localStorage.setItem('pincode', this.value)
 });
 $age.change(function() {
   localStorage.setItem('age', this.value)

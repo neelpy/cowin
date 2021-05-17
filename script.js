@@ -161,29 +161,15 @@ function markAsFetching() {
 async function fetchSlots() {
   console.log('fetching')
   results.innerHTML = '<div class="alert alert-warning">Fetching!</div>';
-  let res;
-  if(localStorage.getItem('pincode')!= "null" && localStorage.getItem('pincode')!= '')
-   {
-      res = await axios({
-      method: 'get',
-      url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByPin',
-      params: {
-        pincode: localStorage.getItem('pincode'),
-        date: getDate()
-      },
-      headers: headers()
-    })
-  } else {
-    res = await axios({
-      method: 'get',
-      url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByDistrict',
-      params: {
-        district_id: localStorage.getItem('district_id'),
-        date: getDate()
-      },
-      headers: headers()
-    })
-  }
+  const res = await axios({
+    method: 'get',
+    url: 'appointment/sessions' + (token ? '/' : '/public/') + 'calendarByDistrict',
+    params: {
+      district_id: localStorage.getItem('district_id'),
+      date: getDate()
+    },
+    headers: headers()
+  })
   const centers = res.data['centers']
   await check(centers)
   await getCaptcha()
@@ -193,9 +179,12 @@ async function check(centers) {
   const age = getAge();
   const fees = getFees();
   const vaccine = getVaccine();
+  const pincodes = getPincodes();
   let count = 0;
   available = centers.filter(center => {
     count += center['sessions'][0]['min_age_limit'] === age;
+    if (pincodes && !pincodes.includes(center['pincode']))
+      return false
     if (fees && fees !== center['fee_type'].toLowerCase())
       return false
     return center['sessions'].some(s => {

@@ -4543,6 +4543,7 @@ const $pincodeInput = $('input#pincode-input')
 const $district = $('#district')
 const $age = $('input[type=radio][name=age]')
 const $dose = $('input[type=radio][name=dose]')
+const $anyVaccine = $('#v-any')
 const $vaccine = $('input[type=radio][name=vaccine]')
 const $fees = $('input[type=radio][name=fees]')
 const $date = $('#date');
@@ -4610,6 +4611,19 @@ $date.valueAsDate = new Date((new Date()).getTime() + 1000 * 3600 * 24);
 
 $('input[type=text]').click(function () {
   this.setSelectionRange(0, this.value.length)
+})
+
+$dose.change(function() {
+  const d = getDose()
+  if (d === 1) {
+    $anyVaccine.attr('disabled', false)
+  } else {
+    const v = getVaccine()
+    if (v === 'any') {
+      $vaccine.val('covishield')
+    }
+    $anyVaccine.attr('disabled', true)
+  }
 })
 
 

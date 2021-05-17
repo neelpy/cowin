@@ -179,9 +179,12 @@ async function check(centers) {
   const age = getAge();
   const fees = getFees();
   const vaccine = getVaccine();
+  const pincodes = getPincodes();
   let count = 0;
   available = centers.filter(center => {
     count += center['sessions'][0]['min_age_limit'] === age;
+    if (pincodes && !pincodes.includes(center['pincode']))
+      return false
     if (fees && fees !== center['fee_type'].toLowerCase())
       return false
     return center['sessions'].some(s => {

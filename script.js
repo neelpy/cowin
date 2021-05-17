@@ -220,7 +220,7 @@ async function setPreferences() {
     const b = ben[i]
     const ageB = 2021 - parseInt(b['birth_year'])
     const doseC = (dose === 1 && b['dose1_date'] === '') || (dose === 2 && b['dose1_date'] !== '')
-    const ageC =  ageB >= age // TODO confirm this
+    const ageC =  age === 18 ? (ageB >= 18 && ageB < 45) : (ageB >= 45)
     const vaccineC = dose === 1 || (dose === 2 && (!vaccine || vaccine === b['vaccine'].toLowerCase()))
     ben[i].allow = doseC && ageC && vaccineC
   }

@@ -4537,6 +4537,15 @@ const districts = [
   }
 ]
 
+const $district = $('#district')
+
+$.each(districts, function(i, d) {
+  $district.append($('<option>', {
+    value: d.district_name + ', ' + d.state_name,
+    text: d.district_id
+  }))
+})
+
 /*
 function getFreshDistricts() {
   const districts = []

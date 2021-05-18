@@ -87,7 +87,7 @@ function play(msg, low=null) {
   console.log(msg)
   if (low) return
   const audio = new Audio();
-  audio.src = 'alert.mp3'
+  audio.src = 'assets/alert.mp3'
   audio.play()
 }
 

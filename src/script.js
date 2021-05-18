@@ -1,4 +1,3 @@
-const secret = 'U2FsdGVkX1+HQAr4dz+duq8zfH7xAvGNjw7bG1OGY9OvIuvNf3P+2J2J0iM1tu3ENPXB6/rPZsvqB+f54ikhuw=='
 axios.defaults.baseURL = 'https://cdn-api.co-vin.in/api/v2'
 const headers = () => ({
   'Content-Type': 'application/json',

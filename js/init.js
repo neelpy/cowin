@@ -3,6 +3,7 @@ const $districtInput = $('input#district-input')
 const $pincodeInput = $('input#pincode-input')
 const $age = $('input[type=radio][name=age]')
 const $dose = $('input[type=radio][name=dose]')
+const $anyVaccine = $('#v-any,#v-any-label')
 const $vaccine = $('input[type=radio][name=vaccine]')
 const $fees = $('input[type=radio][name=fees]')
 const $date = $('#date');
@@ -68,12 +69,23 @@ $districtInput.click(function () {
   this.setSelectionRange(0, this.value.length)
 })
 
+$dose.change(function() {
+  const d = getDose()
+  if (d === 1) {
+    $anyVaccine.show()
+  } else {
+    $anyVaccine.hide()
+    if (!getVaccine())
+      $('#v-covishield').prop('checked', true)
+  }
+})
+
 
 function play(msg, low=null) {
   console.log(msg)
   if (low) return
   const audio = new Audio();
-  audio.src = 'alert.mp3'
+  audio.src = 'assets/alert.mp3'
   audio.play()
 }
 
@@ -121,11 +133,11 @@ if (localStorage.getItem('fees'))
 if (localStorage.getItem('mobile'))
   $mobile.attr('value', localStorage.getItem('mobile'))
 
-token = localStorage.getItem('token')
-timestamp = new Date(localStorage.getItem('timestamp'))
-if (token) login()
-
 $(document).ready(function () {
+  token = localStorage.getItem('token')
+  timestamp = new Date(localStorage.getItem('timestamp'))
+  if (token) login()
+
   const now = new Date((new Date()).getTime() + 1000 * 3600 * 18);
   const day = ("0" + now.getDate()).slice(-2);
   const month = ("0" + (now.getMonth() + 1)).slice(-2);

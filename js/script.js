@@ -65,7 +65,7 @@ function storeToken(newToken) {
   console.log({token})
   localStorage.setItem('token', token)
   timestamp = new Date()
-  localStorage.setItem('timestamp', timestamp.toLocaleString())
+  localStorage.setItem('timestamp', timestamp.toString())
 }
 
 function removeToken() {
@@ -78,7 +78,7 @@ function removeToken() {
 
 function checkTokenRoutine() {
   checkToken()
-  tokenIntervalId = setInterval(checkToken, 60 * 1000)
+  tokenIntervalId = setInterval(checkToken, tokenInterval * 1000)
 }
 
 function checkToken() {

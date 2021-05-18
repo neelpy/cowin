@@ -133,10 +133,11 @@ if (localStorage.getItem('fees'))
 if (localStorage.getItem('mobile'))
   $mobile.attr('value', localStorage.getItem('mobile'))
 
-$(document).ready(function () {
+$(document).ready(async function () {
   token = localStorage.getItem('token')
   timestamp = new Date(localStorage.getItem('timestamp'))
-  if (token) login()
+  console.log('Restore login', {token, timestamp})
+  if (token) await login()
 
   const now = new Date((new Date()).getTime() + 1000 * 3600 * 18);
   const day = ("0" + now.getDate()).slice(-2);

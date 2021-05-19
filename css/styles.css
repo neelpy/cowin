@@ -1,0 +1,31 @@
+* {
+    font-family: sans-serif;
+}
+
+main {
+    height: 100%;
+    top: 0;
+    bottom: 20px;
+}
+
+footer {
+    height: 20px;
+    color: lightgray;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: auto;
+    left: 0;
+    right: 0;
+    font: 500 12px Roboto,"Helvetica Neue",sans-serif;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 10;
+    padding: 0 10px;
+}
+
+.link {
+    color: lightblue;
+    font-weight: bold;
+}

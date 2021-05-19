@@ -1,8 +1,7 @@
-# CoWIN Vaccine Availibility
+# CoWIN Vaccine Booking
 
 ## Features
 
-- Added age group filter (18+ / 45+)
-- Removed unavailable slots from the original app
+- TODO
 - Implemented using the [Co-WIN Public API](https://apisetu.gov.in/public/marketplace/api/cowin).
 

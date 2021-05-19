@@ -4542,7 +4542,8 @@ const $district = $('#district')
 $.each(districts, function(i, d) {
   $district.append($('<option>', {
     value: d.district_name + ', ' + d.state_name,
-    text: d.district_id
+    text: d.district_id,
+    label: d.district_name + ', ' + d.state_name
   }))
 })
 

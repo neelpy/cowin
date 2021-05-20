@@ -188,7 +188,7 @@ async function check(centers) {
     if (fees && fees !== center['fee_type'].toLowerCase())
       return false
     return center['sessions'].some(s => {
-      if (vaccine && vaccine !== s['vaccine'])
+      if (vaccine && vaccine !== s['vaccine'].replace(/ /g, '-').toLowerCase())
         return false
       return (s['available_capacity'] > 10 && s['min_age_limit'] === age)
     })

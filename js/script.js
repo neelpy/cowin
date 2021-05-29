@@ -180,6 +180,8 @@ async function check(centers) {
   const fees = getFees();
   const vaccine = getVaccine();
   const pincodes = getPincodes();
+  const dose = getDose()
+  const cap = `available_capacity_dose${dose}`
   let count = 0;
   available = centers.filter(center => {
     count += center['sessions'][0]['min_age_limit'] === age;
@@ -190,14 +192,14 @@ async function check(centers) {
     return center['sessions'].some(s => {
       if (vaccine && vaccine !== s['vaccine'].replace(/ /g, '-').toLowerCase())
         return false
-      return (s['available_capacity'] > 10 && s['min_age_limit'] === age)
+      return (s[cap] > 10 && s['min_age_limit'] === age)
     })
   })
   console.log({available, centers});
   const template = center => `
           <div class="p-1" style="border: 1px solid black">
               <b>${center.name}, Pincode: <a href="https://www.google.com/maps/place/${center['pincode']}" target="_blank">${center['pincode']}</a></b><br>
-              ${center['sessions'].filter(s => 0 < s['available_capacity']).map(s => s['date'] + ': ' + s['available_capacity']).join('<br>')}<br>
+              ${center['sessions'].filter(s => 0 < s[cap]).map(s => s['date'] + ': ' + s[cap]).join('<br>')}<br>
           </div>
       `;
   await delay(1)

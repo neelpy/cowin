@@ -80,6 +80,20 @@ $dose.change(function() {
   }
 })
 
+$('#share').click(function() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'CoWIN Vaccine Booking',
+      text: 'Check out this tool for booking vaccine slots on CoWIN without unnecessary clicks or effort.',
+      url: 'https://neelpy.github.io/cowin',
+    })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+  } else {
+    console.log('browser not supported for share');
+  }
+})
+
 var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   return new bootstrap.Popover(popoverTriggerEl)
@@ -151,6 +165,11 @@ $(document).ready(async function () {
   const month = ("0" + (now.getMonth() + 1)).slice(-2);
   const today = now.getFullYear()+"-"+(month)+"-"+(day) ;
   $date.val(today);
+
+  $captchaInput.keypress(function(e){
+    if(e.keyCode==13)
+    $book.click();
+  });
 })
 
 

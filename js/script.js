@@ -245,6 +245,7 @@ async function getCaptcha() {
     headers: headers()
   })
   $captcha.html(res.data.captcha)
+  $captchaInput.val('')
   $captchaDiv.show()
   stopFetchSlots()
   $fetchDiv.hide()

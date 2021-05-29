@@ -80,6 +80,11 @@ $dose.change(function() {
   }
 })
 
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+
 
 function play(msg, low=null) {
   console.log(msg)
@@ -120,6 +125,8 @@ function getPincodes() {
 // Load
 if (localStorage.getItem('district_name'))
   $districtInput.attr('value', localStorage.getItem('district_name'))
+else
+  $districtInput.addClass('is-invalid')
 if (localStorage.getItem('pincode'))
   $pincodeInput.attr('value', localStorage.getItem('pincode'))
 if (localStorage.getItem('age'))
@@ -151,12 +158,19 @@ $(document).ready(async function () {
 $districtInput.change(function() {
   const options = $('datalist')[0].options;
   const val = $(this).val();
+  let found;
   for (let i=0; i<options.length; i++){
     if (options[i].value === val) {
-      localStorage.setItem('district_id', options[i].innerText)
-      localStorage.setItem('district_name', val)
+      found = options[i]
       break;
     }
+  }
+  if (found) {
+    localStorage.setItem('district_id', found.innerText)
+    localStorage.setItem('district_name', found.value)
+    $districtInput.removeClass('is-invalid')
+  } else {
+    $districtInput.addClass('is-invalid')
   }
 });
 $pincodeInput.change(function() {

@@ -24,6 +24,7 @@ const $relogin = $('#relogin')
 const $logout = $('#logout')
 const $ben = $('#ben')
 
+const $notification = $('#notification')
 const $fetchDiv = $('#fetch-div')
 const $fetchLabel = $('#fetch-label')
 const $fetchingDiv = $('#fetching-div')
@@ -59,6 +60,7 @@ $(document).ready(function () {
   $startFetch.click(startFetchSlots)
   $stopFetch.click(stopFetchSlots)
   $book.click(book)
+  $notification.click(toggleNotification)
   $('input[type=radio]').change(setPreferences)
 })
 $fetchingDiv.hide()
@@ -106,6 +108,8 @@ function play(msg, low=null) {
   const audio = new Audio();
   audio.src = 'assets/alert.mp3'
   audio.play()
+  if(localStorage.getItem('notification'))
+    new Notification(msg)
 }
 
 const delay = (s) => new Promise((resolve) => setTimeout(resolve, s * 1000))
@@ -153,6 +157,10 @@ if (localStorage.getItem('fees'))
   $(`input#${localStorage.getItem('fees')}`).prop('checked', true)
 if (localStorage.getItem('mobile'))
   $mobile.attr('value', localStorage.getItem('mobile'))
+if(Notification.permission !== 'granted')
+  localStorage.removeItem('notification')
+if(localStorage.getItem('notification') && Notification.permission !== 'denied')
+  $notification.prop('checked', true)
 
 $(document).ready(async function () {
   token = localStorage.getItem('token')

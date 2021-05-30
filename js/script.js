@@ -309,3 +309,27 @@ async function download(appointment_id) {
   document.body.appendChild(link);
   link.click();
 }
+
+async function toggleNotification() {
+  if(localStorage.getItem('notification')) {
+    localStorage.removeItem('notification')
+    $notification.prop('checked', false)
+  } else {
+    if ("Notification" in window) {
+      if (Notification.permission !== "denied") {
+        const permission = await Notification.requestPermission()
+
+        if(permission === 'granted') {
+          $notification.prop('checked', true)
+          localStorage.setItem('notification', 'true')
+          new Notification('Notifcations Enabled')
+        }
+      }
+    }
+  }
+
+  if(Notification.permission === 'denied') {
+    $notification.prop('checked', false)
+    alert('Permission Denied')
+  }
+}

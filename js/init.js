@@ -41,7 +41,7 @@ const $bookingDiv = $('#booking-div')
 // Variables
 let mobile, txnId, token, timestamp, ben, pref, session, available;
 let appointment_id;
-let intervalId, interval = 5; // seconds
+let intervalId, interval = 60; // seconds
 let tokenIntervalId, tokenInterval = 60; // seconds
 
 

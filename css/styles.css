@@ -29,3 +29,6 @@ footer {
     color: lightblue;
     font-weight: bold;
 }
+.stale-banner {
+    margin-top: 4.5rem;
+}
